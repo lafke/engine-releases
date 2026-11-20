@@ -37,9 +37,15 @@ jobs:
           go-version-file: engine/go.mod
           cache-dependency-path: engine/go.sum
       - name: Package
+        env:
+          RULEPACK_PUBLIC_KEY: ${{ secrets.RULEPACK_PUBLIC_KEY }}
+          RULEPACK_DECRYPTION_KEY: ${{ secrets.RULEPACK_DECRYPTION_KEY }}
         run: sh scripts/package.sh ${{ matrix.goos }} ${{ matrix.goarch }} dev
       - name: Smoke test
+        env:
+          RULEPACK_DECRYPTION_KEY: ${{ secrets.RULEPACK_DECRYPTION_KEY }}
         if: matrix.goos == 'linux' && matrix.goarch == 'amd64'
         run: |
           mkdir smoke && tar -xzf dist/lafke-engine_linux_amd64.tar.gz -C smoke
           smoke/lafke-engine version
+          (cd engine && bash scripts/verify-release.sh ../smoke/lafke-engine dev)

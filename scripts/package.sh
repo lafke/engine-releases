@@ -2,7 +2,9 @@
 # Builds the engine for one platform and packages it in one archive.
 #
 # usage: package.sh <goos> <goarch> <version>
-# env:   ENGINE_DIR (default ./engine), OUT_DIR (default ./dist)
+# env:   ENGINE_DIR (default ./engine), OUT_DIR (default ./dist),
+#        RULEPACK_PUBLIC_KEY and RULEPACK_DECRYPTION_KEY (required by the engine's
+#        scripts/build-release.sh, which pins them in the executable)
 set -eu
 
 goos=${1:?goos}
@@ -20,9 +22,7 @@ stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
 
 export CGO_ENABLED=0 GOOS="$goos" GOARCH="$goarch"
-(cd "$ENGINE_DIR" && go build -trimpath \
-  -ldflags "-s -w -X main.version=${version}" \
-  -o "$stage/lafke-engine${ext}" ./cmd/lafke-engine)
+(cd "$ENGINE_DIR" && VERSION="$version" OUTPUT="$stage/lafke-engine${ext}" bash scripts/build-release.sh)
 
 cp "$ENGINE_DIR/LICENSE" "$stage/LICENSE"
 
