@@ -1,4 +1,4 @@
-# lafke-engine releases
+# Lafke engine releases
 
 Prebuilt `lafke-engine` executables for the [Lafke](https://github.com/lafke/lafke)
 CLI. The engine does the source-code analysis behind `lafke sast`, `security` and
