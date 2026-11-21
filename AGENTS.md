@@ -36,6 +36,6 @@ provenance and publishes the binaries. It carries no engine code. The `lafke` CL
   `lafke/engine`. They are independent of the CLI's tags. Never move or reuse a published tag.
 - Scripts are POSIX `sh` unless they already use bash.
 - Code, comments, commit messages, and everything published to GitHub are in English.
-- Every commit message follows Conventional Commits, is all lowercase, and is 40 to 50
+- Every commit message follows Conventional Commits, is all lowercase, and is 35 to 55
   characters long, counting the whole subject line (e.g. `ci(release): attest the sbom before publishing`).
   Check the length before committing.
