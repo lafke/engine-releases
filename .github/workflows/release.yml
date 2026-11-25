@@ -196,3 +196,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: gh release edit "$TAG" --draft=false
+
+  benchmark:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask lafke/benchmarks to measure this release
+        env:
+          GH_TOKEN: ${{ secrets.BENCHMARKS_DISPATCH_TOKEN }}
+        run: |
+          gh api repos/lafke/benchmarks/dispatches \
+            -f event_type=engine-release \
+            -f "client_payload[tag]=${TAG}"
