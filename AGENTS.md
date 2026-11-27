@@ -18,7 +18,7 @@ provenance and publishes the binaries. It carries no engine code. The `lafke` CL
   with every asset, attests the binaries and publishes only after all attestations succeed.
   Triggered by `repository_dispatch` (`engine-release`) from `lafke/engine`, or by
   `workflow_dispatch` with a tag.
-- `scripts/package.sh <goos> <goarch> <version>`: builds one platform from the engine's `rust/` crate with its `scripts/build-release.sh` and writes the archive. The matrix in both workflows names the native runner and Rust target of each platform.
+- `scripts/package.sh <goos> <goarch> <version>`: builds one platform from the engine crate with its `scripts/build-release.sh` and writes the archive. The matrix in both workflows names the native runner and Rust target of each platform.
 - `scripts/manifest.sh`: writes `engine-manifest.json` (version, protocol, checksums).
 - `README.md`: what a release contains and how to verify a download.
 
