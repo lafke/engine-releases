@@ -5,7 +5,7 @@
 # env:   ENGINE_DIR (default ./engine), OUT_DIR (default ./dist),
 #        RULEPACK_PUBLIC_KEY and RULEPACK_DECRYPTION_KEY (required by the engine's
 #        scripts/build-release.sh, which pins them in the executable). The engine is built
-#        from its rust/ crate; GOOS and GOARCH only select the target.
+#        from its Cargo crate; GOOS and GOARCH only select the target.
 set -eu
 
 goos=${1:?goos}
