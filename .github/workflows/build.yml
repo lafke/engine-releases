@@ -18,13 +18,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { goos: linux, goarch: amd64 }
-          - { goos: linux, goarch: arm64 }
-          - { goos: darwin, goarch: amd64 }
-          - { goos: darwin, goarch: arm64 }
-          - { goos: windows, goarch: amd64 }
-          - { goos: windows, goarch: arm64 }
-    runs-on: ubuntu-latest
+          - { goos: linux, goarch: amd64, runner: ubuntu-latest, target: x86_64-unknown-linux-gnu }
+          - { goos: linux, goarch: arm64, runner: ubuntu-24.04-arm, target: aarch64-unknown-linux-gnu }
+          - { goos: darwin, goarch: amd64, runner: macos-latest, target: x86_64-apple-darwin }
+          - { goos: darwin, goarch: arm64, runner: macos-latest, target: aarch64-apple-darwin }
+          - { goos: windows, goarch: amd64, runner: windows-latest, target: x86_64-pc-windows-msvc }
+          - { goos: windows, goarch: arm64, runner: windows-latest, target: aarch64-pc-windows-msvc }
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -32,11 +32,13 @@ jobs:
           repository: lafke/engine
           path: engine
           token: ${{ secrets.ENGINE_ACCESS_TOKEN }}
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: engine/go.mod
-          cache-dependency-path: engine/go.sum
+      - name: Rust toolchain
+        shell: bash
+        run: |
+          rustup toolchain install stable --profile minimal --target ${{ matrix.target }}
+          rustc --version
       - name: Package
+        shell: bash
         env:
           RULEPACK_PUBLIC_KEY: ${{ secrets.RULEPACK_PUBLIC_KEY }}
           RULEPACK_DECRYPTION_KEY: ${{ secrets.RULEPACK_DECRYPTION_KEY }}
@@ -45,6 +47,7 @@ jobs:
         env:
           RULEPACK_DECRYPTION_KEY: ${{ secrets.RULEPACK_DECRYPTION_KEY }}
         if: matrix.goos == 'linux' && matrix.goarch == 'amd64'
+        shell: bash
         run: |
           mkdir smoke && tar -xzf dist/lafke-engine_linux_amd64.tar.gz -C smoke
           smoke/lafke-engine version
