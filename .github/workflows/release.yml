@@ -103,8 +103,8 @@ jobs:
           (cd cli && go build -o "$RUNNER_TEMP/lafke" ./cmd/lafke)
           export SOURCE_DATE_EPOCH=$(git -C engine log -1 --format=%ct)
           mkdir dist
-          "$RUNNER_TEMP/lafke" lock engine --offline --no-fail
-          "$RUNNER_TEMP/lafke" sbom export engine --spec spdx --offline > dist/lafke-engine.spdx.json
+          "$RUNNER_TEMP/lafke" lock engine/rust --offline --no-fail
+          "$RUNNER_TEMP/lafke" sbom export engine/rust --spec spdx --offline > dist/lafke-engine.spdx.json
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dist-sbom
